@@ -61,6 +61,10 @@ img {
   max-width: var(--max);
   margin: auto;
   padding: 0 26px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  transition: background 0.3s, box-shadow 0.3s;
   /* border-bottom: 1px solid var(--line); */
 }
 
@@ -158,6 +162,8 @@ nav a:hover:after,
   align-items: center;
   padding-top: 1px;
   padding-bottom: 72px;
+  position: relative;
+  overflow: hidden;
 }
 
 .eyebrow {
@@ -276,7 +282,7 @@ h2 {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 32px;
+  overflow: hidden;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   font-size: 12px;
@@ -1579,5 +1585,373 @@ a:focus-visible {
 
   .hero-social a:hover {
     transform: none;
+  }
+}
+
+/* ═══════════════════════════════════════════════
+   WOW ANIMATIONS & EFFECTS
+   ═══════════════════════════════════════════════ */
+
+/* ── Scroll progress bar ── */
+.scroll-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--lime), var(--orange));
+  z-index: 60;
+  pointer-events: none;
+  transition: width 0.05s linear;
+}
+
+/* ── Sticky header state ── */
+.site-header.scrolled {
+  background: rgba(13, 15, 16, 0.92);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow: 0 1px 30px rgba(0, 0, 0, 0.35);
+}
+
+/* ── Particle canvas ── */
+.hero-particles {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.55;
+}
+
+.hero-copy,
+.hero-proof {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Scroll reveal animations ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0s);
+}
+
+.reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.92);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  transition-delay: var(--reveal-delay, 0s);
+}
+
+.reveal-scale.revealed {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ── Gradient text shimmer ── */
+.gradient-text {
+  background: linear-gradient(
+    120deg,
+    var(--ink) 0%,
+    var(--ink) 35%,
+    var(--lime) 50%,
+    var(--orange) 60%,
+    var(--ink) 75%,
+    var(--ink) 100%
+  );
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 4s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 100% 50%; }
+  50% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+/* ── Status dot pulse ── */
+@keyframes dotPulse {
+  0%, 100% { box-shadow: 0 0 0 4px rgba(115, 199, 149, 0.12); }
+  50% { box-shadow: 0 0 0 8px rgba(115, 199, 149, 0.25), 0 0 16px rgba(115, 199, 149, 0.15); }
+}
+
+.status-dot {
+  animation: dotPulse 2.5s ease-in-out infinite;
+}
+
+/* ── Infinite marquee ── */
+.marquee-track {
+  display: flex;
+  width: 100%;
+  overflow: hidden;
+}
+
+.marquee-content {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  white-space: nowrap;
+  animation: marqueeScroll 25s linear infinite;
+  flex-shrink: 0;
+  padding: 0 16px;
+}
+
+@keyframes marqueeScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-33.33%); }
+}
+
+/* ── Button micro-animations ── */
+.btn-arrow {
+  display: inline-block;
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.button:hover .btn-arrow {
+  transform: translate(3px, 3px);
+}
+
+.button-dark {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.3s;
+}
+
+.button-dark:hover {
+  box-shadow: 0 0 24px rgba(185, 217, 130, 0.25), 0 0 60px rgba(185, 217, 130, 0.1);
+}
+
+.button-dark::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.15) 50%, transparent 70%);
+  background-size: 200% 100%;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.button-dark:hover::after {
+  opacity: 1;
+  animation: btnShine 0.6s ease forwards;
+}
+
+@keyframes btnShine {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ── Project card glow border on hover ── */
+.mini-project {
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 0.35s,
+              box-shadow 0.35s;
+}
+
+.mini-project:hover {
+  border-color: rgba(185, 217, 130, 0.35);
+  box-shadow: 0 0 30px rgba(185, 217, 130, 0.08),
+              0 20px 60px rgba(0, 0, 0, 0.25),
+              inset 0 1px 0 rgba(185, 217, 130, 0.1);
+}
+
+/* ── 3D tilt card styles ── */
+.tilt-card {
+  transform-style: preserve-3d;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.4s;
+}
+
+.tilt-card:hover {
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3),
+              0 0 30px rgba(185, 217, 130, 0.06);
+}
+
+.tilt-card .mini-project-copy,
+.tilt-card .group-header,
+.tilt-card .group-description,
+.tilt-card .tags {
+  transform: translateZ(20px);
+}
+
+/* ── Tag pill hover ── */
+.tags span {
+  transition: transform 0.2s, background 0.2s, border-color 0.2s, color 0.2s;
+  cursor: default;
+}
+
+.tags span:hover {
+  transform: translateY(-2px) scale(1.05);
+  background: #232829;
+  border-color: rgba(185, 217, 130, 0.3);
+  color: var(--lime);
+}
+
+/* ── Text link arrow animation ── */
+.text-link span {
+  display: inline-block;
+  transition: transform 0.25s;
+}
+
+.text-link:hover span {
+  transform: translate(3px, -3px);
+}
+
+/* ── Metric counter animated ── */
+.metric strong,
+.adoption-grid strong {
+  transition: color 0.3s;
+}
+
+/* ── Section divider line draw ── */
+.experience .section-heading,
+.work .section-heading {
+  position: relative;
+}
+
+/* ── Workflow panel animation ── */
+.flow-node {
+  transition: transform 0.3s, border-color 0.3s, color 0.3s;
+}
+
+.flow-node:hover {
+  transform: translateY(-2px);
+  border-color: var(--lime);
+  color: var(--lime);
+}
+
+/* ── Terminal panel typing effect ── */
+.terminal-panel span {
+  animation: terminalGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes terminalGlow {
+  0% { text-shadow: 0 0 4px rgba(185, 217, 130, 0.3); }
+  100% { text-shadow: 0 0 12px rgba(185, 217, 130, 0.6); }
+}
+
+/* ── Footer link hover ── */
+.footer-links a {
+  transition: color 0.2s, transform 0.2s;
+}
+
+.footer-links a:hover {
+  color: var(--lime);
+  transform: translateX(4px);
+}
+
+/* ── Detail stack animation ── */
+.detail {
+  transition: border-color 0.3s, transform 0.3s;
+}
+
+.detail:hover {
+  border-color: rgba(185, 217, 130, 0.35);
+  transform: translateX(6px);
+}
+
+/* ── Group image hover ── */
+.group-image {
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), filter 0.4s;
+}
+
+.group-image:hover {
+  transform: scale(1.03);
+  filter: brightness(1.1);
+}
+
+/* ── Proof kicker underline draw ── */
+.proof-kicker {
+  position: relative;
+  display: inline-block;
+}
+
+.proof-kicker::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0;
+  height: 2px;
+  background: var(--lime);
+  transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.hero-proof.revealed .proof-kicker::after {
+  width: 100%;
+}
+
+/* ── Metric line reveal ── */
+.metric {
+  transition: opacity 0.4s, transform 0.4s;
+}
+
+/* ── Intro strip dark theme override ── */
+.intro-strip {
+  position: relative;
+}
+
+/* ── Reduced motion overrides ── */
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .gradient-text {
+    animation: none;
+    -webkit-text-fill-color: var(--ink);
+  }
+
+  .marquee-content {
+    animation: none;
+  }
+
+  .status-dot {
+    animation: none;
+  }
+
+  .tilt-card {
+    transform: none !important;
+  }
+
+  .btn-arrow {
+    transition: none;
+  }
+
+  .terminal-panel span {
+    animation: none;
+  }
+}
+
+/* ── Mobile overrides for animations ── */
+@media (max-width: 800px) {
+  .hero-particles {
+    opacity: 0.3;
+  }
+
+  .reveal {
+    transform: translateY(25px);
+  }
+
+  .marquee-content {
+    animation-duration: 18s;
+  }
+
+  .site-header {
+    position: sticky;
+    top: 0;
   }
 }

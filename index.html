@@ -18,6 +18,7 @@
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header" id="top">
+    <div class="scroll-progress" aria-hidden="true"></div>
     <a class="wordmark" href="#top" aria-label="Abhinav Krishna P, home"><span class="wordmark-text">Abhinav Krishna P.</span><span class="wordmark-cursor" aria-hidden="true"></span></a>
     <nav aria-label="Primary navigation">
       <a href="#work">Work</a>
@@ -29,8 +30,9 @@
   </header>
   <main id="main">
     <section class="hero section-shell" aria-labelledby="hero-title">
+      <canvas class="hero-particles" aria-hidden="true"></canvas>
       <div class="hero-copy">
-        <div class="hero-top-bar">
+        <div class="hero-top-bar reveal reveal-up">
           <p class="eyebrow"><span class="status-dot"></span> Software engineer · Calicut, Kerala</p>
           <ul class="hero-social" aria-label="Contact links">
             <li><a href="mailto:abhinavkrishna.p67@gmail.com" aria-label="Email Abhinav Krishna P"><svg
@@ -58,30 +60,35 @@
                 </svg></a></li>
           </ul>
         </div>
-        <h1 id="hero-title">I build useful software, from the first idea to production.</h1>
-        <p class="hero-lede">Full-stack engineer focused on AI products, Shopify apps and browser extensions. I turn
+        <h1 id="hero-title" class="reveal reveal-up" style="--reveal-delay: 0.15s">I build <span class="gradient-text">useful software</span>, from the first idea to production.</h1>
+        <p class="hero-lede reveal reveal-up" style="--reveal-delay: 0.3s">Full-stack engineer focused on AI products, Shopify apps and browser extensions. I turn
           complex workflows into clear, dependable experiences.</p>
-        <div class="hero-actions">
-          <a class="button button-dark" href="#work">View selected work <span>↘</span></a>
+        <div class="hero-actions reveal reveal-up" style="--reveal-delay: 0.45s">
+          <a class="button button-dark" href="#work">View selected work <span class="btn-arrow">↘</span></a>
           <a class="button button-light" href="mailto:abhinavkrishna.p67@gmail.com">abhinavkrishna.p67@gmail.com</a>
         </div>
       </div>
-      <aside class="hero-proof" aria-label="Selected outcomes">
+      <aside class="hero-proof reveal reveal-up" style="--reveal-delay: 0.5s" aria-label="Selected outcomes">
         <p class="proof-kicker">Selected outcomes</p>
-        <div class="metric"><strong>8,000+</strong><span>Chrome extension installs</span></div>
-        <div class="metric"><strong>1,000+</strong><span>Monthly active users</span></div>
-        <div class="metric"><strong>100+</strong><span>Merchants served by Shopify apps</span></div>
-        <div class="metric"><strong>4.5</strong><span>Chrome Web Store rating</span></div>
+        <div class="metric"><strong data-count="8000">0</strong><span>Chrome extension installs</span></div>
+        <div class="metric"><strong data-count="1000">0</strong><span>Monthly active users</span></div>
+        <div class="metric"><strong data-count="100">0</strong><span>Merchants served by Shopify apps</span></div>
+        <div class="metric"><strong data-count="4.5" data-decimal="true">0</strong><span>Chrome Web Store rating</span></div>
       </aside>
     </section>
 
     <section class="intro-strip" aria-label="Professional profile">
-      <span>Full-stack</span><i></i><span>AI systems</span><i></i><span>Shopify</span><i></i><span>Chrome
-        extensions</span>
+      <div class="marquee-track">
+        <div class="marquee-content">
+          <span>Full-stack</span><i></i><span>AI systems</span><i></i><span>Shopify</span><i></i><span>Chrome extensions</span><i></i>
+          <span>Full-stack</span><i></i><span>AI systems</span><i></i><span>Shopify</span><i></i><span>Chrome extensions</span><i></i>
+          <span>Full-stack</span><i></i><span>AI systems</span><i></i><span>Shopify</span><i></i><span>Chrome extensions</span><i></i>
+        </div>
+      </div>
     </section>
 
     <section class="work section-shell" id="work" aria-labelledby="work-title">
-      <div class="section-heading">
+      <div class="section-heading reveal reveal-up">
         <div>
           <p class="eyebrow">Selected work</p>
           <h2 id="work-title">Four areas. One product mindset.</h2>
@@ -90,7 +97,7 @@
       </div>
 
       <div class="portfolio-groups">
-        <section class="project-group shopify-group" aria-labelledby="shopify-title">
+        <section class="project-group shopify-group reveal reveal-up" aria-labelledby="shopify-title">
           <header class="group-header">
             <div><span class="group-number">01</span>
               <p class="group-kicker">Commerce products</p>
@@ -99,7 +106,7 @@
             <p>Production storefront experiences spanning guided shopping, merchandising, search and discount logic.</p>
           </header>
           <div class="shopify-grid">
-            <article class="mini-project">
+            <article class="mini-project tilt-card" style="--reveal-delay: 0.1s">
               <img src="assets/carteasy.png" alt="CartEasy AI Store Assistant product interface" loading="lazy" />
               <div class="mini-project-copy">
                 <p class="project-label">AI shopping assistant</p>
@@ -111,7 +118,7 @@
                   rel="noopener noreferrer">Shopify listing <span>↗</span></a>
               </div>
             </article>
-            <article class="mini-project">
+            <article class="mini-project tilt-card" style="--reveal-delay: 0.2s">
               <img src="assets/product_filters.png" alt="Aco Custom Discounts app promotional screen" loading="lazy" />
               <div class="mini-project-copy">
                 <p class="project-label">Search &amp; discovery</p>
@@ -124,7 +131,7 @@
                   rel="noopener noreferrer">Project docs <span>↗</span></a>
               </div>
             </article>
-            <article class="mini-project">
+            <article class="mini-project tilt-card" style="--reveal-delay: 0.3s">
               <img src="assets/aco-discounts.jpg" alt="Aco Custom Discounts app promotional screen" loading="lazy" />
               <div class="mini-project-copy">
                 <p class="project-label">Pricing rules</p>
@@ -140,7 +147,7 @@
         </section>
 
         <div class="secondary-groups">
-          <section class="project-group chrome-group" aria-labelledby="chrome-title">
+          <section class="project-group chrome-group reveal reveal-up tilt-card" style="--reveal-delay: 0.1s" aria-labelledby="chrome-title">
             <header class="group-header compact-header">
               <div><span class="group-number">02</span>
                 <p class="group-kicker">Chrome extension</p>
@@ -155,9 +162,9 @@
             <p class="group-description">An open-source AI assistant that generates n8n workflow JSON from plain-English
               prompts, supports debugging and inserts workflows into the canvas.</p>
             <div class="adoption-grid">
-              <div><strong>8,000+</strong><span>installs</span></div>
-              <div><strong>1,000+</strong><span>monthly active users</span></div>
-              <div><strong>4.5</strong><span>rating</span></div>
+              <div><strong data-count="8000">0</strong><span>installs</span></div>
+              <div><strong data-count="1000">0</strong><span>monthly active users</span></div>
+              <div><strong data-count="4.5" data-decimal="true">0</strong><span>rating</span></div>
             </div>
             <div class="tags"><span>Chrome APIs</span><span>LLMs</span><span>Firebase</span><span>Workflow
                 generation</span></div>
@@ -165,7 +172,7 @@
               Copilot <span>↗</span></a>
           </section>
 
-          <section class="project-group saas-group" aria-labelledby="saas-title">
+          <section class="project-group saas-group reveal reveal-up tilt-card" style="--reveal-delay: 0.2s" aria-labelledby="saas-title">
             <header class="group-header compact-header">
               <div><span class="group-number">03</span>
                 <p class="group-kicker">SaaS product snapshot</p>
@@ -184,7 +191,7 @@
               Visibility.so <span>↗</span></a>
           </section>
 
-          <section class="project-group automation-group" aria-labelledby="automation-title">
+          <section class="project-group automation-group reveal reveal-up tilt-card" style="--reveal-delay: 0.3s" aria-labelledby="automation-title">
             <header class="group-header compact-header">
               <div><span class="group-number">04</span>
                 <p class="group-kicker">n8n workflows &amp; QA automation</p>
@@ -214,13 +221,13 @@
     </section>
 
     <section class="experience section-shell" id="experience" aria-labelledby="experience-title">
-      <div class="section-heading">
+      <div class="section-heading reveal reveal-up">
         <div>
           <p class="eyebrow">Experience</p>
           <h2 id="experience-title">Built in production.</h2>
         </div>
       </div>
-      <article class="role">
+      <article class="role reveal reveal-up">
         <div class="role-summary">
           <p class="role-date">June 2025 — Present</p>
           <h3>Software Engineer / Automation Engineer</h3>
@@ -238,14 +245,14 @@
     </section>
 
     <section class="about section-shell" id="about" aria-labelledby="about-title">
-      <div class="about-copy">
+      <div class="about-copy reveal reveal-up">
         <p class="eyebrow">About</p>
         <h2 id="about-title">An engineer who stays close to the problem.</h2>
         <p>I work across product, frontend, backend, AI integration and release operations. My focus is simple:
           understand the user, choose a practical architecture, ship, measure and keep improving.</p>
-        <a class="button button-dark" href="mailto:abhinavkrishna.p67@gmail.com">Start a conversation <span>↗</span></a>
+        <a class="button button-dark" href="mailto:abhinavkrishna.p67@gmail.com">Start a conversation <span class="btn-arrow">↗</span></a>
       </div>
-      <div class="detail-stack">
+      <div class="detail-stack reveal reveal-up" style="--reveal-delay: 0.2s">
         <div class="detail">
           <h3>Core stack</h3>
           <p>TypeScript, JavaScript, Node.js, React, Remix, Python, REST APIs, Shopify APIs, PostgreSQL, MongoDB,
@@ -269,11 +276,11 @@
   </main>
 
   <footer class="site-footer" id="contact">
-    <div>
-      <p class="eyebrow">Let’s build something useful.</p>
+    <div class="reveal reveal-up">
+      <p class="eyebrow">Let's build something useful.</p>
       <h2>Available for full-stack and software engineering roles.</h2>
     </div>
-    <div class="footer-links">
+    <div class="footer-links reveal reveal-up" style="--reveal-delay: 0.15s">
       <a href="mailto:abhinavkrishna.p67@gmail.com">Email ↗</a>
       <a href="https://www.linkedin.com/in/abhinavkrishnap" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
       <a href="https://github.com/Abhinav-Krishna-p" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
