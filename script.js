@@ -29,9 +29,21 @@ document.addEventListener("DOMContentLoaded", () => {
           revealObserver.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    }, { threshold: 0.08, rootMargin: '0px 0px -8% 0px' });
 
     revealEls.forEach(el => revealObserver.observe(el));
+
+    // Windows/first-paint fallback: reveal hero items already in view
+    requestAnimationFrame(() => {
+      revealEls.forEach(el => {
+        if (el.classList.contains('revealed')) return;
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight * 0.92 && rect.bottom > 0) {
+          el.classList.add('revealed');
+          revealObserver.unobserve(el);
+        }
+      });
+    });
   }
 
   // ═══════════════════════════════════════════════
@@ -39,6 +51,23 @@ document.addEventListener("DOMContentLoaded", () => {
   // ═══════════════════════════════════════════════
   const counterEls = document.querySelectorAll('[data-count]');
   if (counterEls.length) {
+    // Reserve final-width space so counting from 0 does not collapse rows
+    counterEls.forEach(el => {
+      const target = parseFloat(el.dataset.count);
+      const isDecimal = el.dataset.decimal === 'true';
+      const suffix = el.dataset.suffix ?? (target >= 100 ? '+' : '');
+      const finalText = isDecimal
+        ? target.toFixed(1)
+        : target.toLocaleString() + suffix;
+      el.style.minWidth = '0';
+      el.textContent = finalText;
+      const width = el.getBoundingClientRect().width;
+      if (width > 0) {
+        el.style.minWidth = Math.ceil(width) + 'px';
+      }
+      el.textContent = isDecimal ? '0.0' : '0';
+    });
+
     const counterObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -46,17 +75,32 @@ document.addEventListener("DOMContentLoaded", () => {
           counterObserver.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.3 });
+    }, { threshold: 0.2, rootMargin: '0px 0px -5% 0px' });
 
     counterEls.forEach(el => counterObserver.observe(el));
+
+    // Start hero counters immediately if already visible on load
+    requestAnimationFrame(() => {
+      counterEls.forEach(el => {
+        if (el.dataset.counted === 'true') return;
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight * 0.92 && rect.bottom > 0) {
+          animateCounter(el);
+          counterObserver.unobserve(el);
+        }
+      });
+    });
   }
 
   function animateCounter(el) {
+    if (el.dataset.counted === 'true') return;
+    el.dataset.counted = 'true';
+
     const target = parseFloat(el.dataset.count);
     const isDecimal = el.dataset.decimal === 'true';
     const duration = 2000;
     const startTime = performance.now();
-    const suffix = target >= 100 ? '+' : '';
+    const suffix = el.dataset.suffix ?? (target >= 100 ? '+' : '');
 
     function update(now) {
       const elapsed = now - startTime;
@@ -252,6 +296,135 @@ document.addEventListener("DOMContentLoaded", () => {
       link.addEventListener('mouseleave', () => {
         link.style.transform = 'translate(0, 0) scale(1)';
       });
+    });
+  }
+
+  // ═══════════════════════════════════════════════
+  //  WORK SECTION: pill nav with sliding indicator
+  // ═══════════════════════════════════════════════
+  const workNav = document.querySelector('.work-nav');
+  if (workNav) {
+    const tabs = Array.from(workNav.querySelectorAll('[role="tab"]'));
+    const panels = Array.from(document.querySelectorAll('.work-stage [role="tabpanel"]'));
+    const indicator = workNav.querySelector('.work-nav-indicator');
+
+    function currentTab() {
+      return tabs.find(t => t.classList.contains('is-active')) || tabs[0];
+    }
+
+    function moveIndicator(tab) {
+      if (!indicator || !tab) return;
+      const navRect = workNav.getBoundingClientRect();
+      const rect = tab.getBoundingClientRect();
+      indicator.style.width = rect.width + 'px';
+      indicator.style.transform = `translateX(${rect.left - navRect.left + workNav.scrollLeft}px)`;
+    }
+
+    function activateTab(nextTab, { focus = true } = {}) {
+      tabs.forEach(tab => {
+        const selected = tab === nextTab;
+        tab.classList.toggle('is-active', selected);
+        tab.setAttribute('aria-selected', selected ? 'true' : 'false');
+        tab.tabIndex = selected ? 0 : -1;
+      });
+
+      panels.forEach(panel => {
+        const match = panel.id === nextTab.getAttribute('aria-controls');
+        panel.classList.toggle('is-active', match);
+        if (match) {
+          panel.removeAttribute('hidden');
+        } else {
+          panel.setAttribute('hidden', '');
+        }
+      });
+
+      nextTab.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
+      moveIndicator(nextTab);
+      if (focus) nextTab.focus({ preventScroll: true });
+    }
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => activateTab(tab, { focus: false }));
+
+      tab.addEventListener('keydown', (e) => {
+        const keyMap = {
+          ArrowRight: (index + 1) % tabs.length,
+          ArrowLeft: (index - 1 + tabs.length) % tabs.length,
+          Home: 0,
+          End: tabs.length - 1
+        };
+        if (!(e.key in keyMap)) return;
+        e.preventDefault();
+        activateTab(tabs[keyMap[e.key]]);
+      });
+    });
+
+    // Position the indicator once layout and fonts are settled
+    const settle = () => {
+      moveIndicator(currentTab());
+      workNav.classList.add('is-ready');
+    };
+    requestAnimationFrame(settle);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(settle);
+    window.addEventListener('resize', () => moveIndicator(currentTab()), { passive: true });
+    workNav.addEventListener('scroll', () => moveIndicator(currentTab()), { passive: true });
+  }
+
+  // ═══════════════════════════════════════════════
+  //  PROJECT DETAILS MODAL
+  // ═══════════════════════════════════════════════
+  const projectModal = document.getElementById('project-modal');
+  if (projectModal) {
+    const dialog = projectModal.querySelector('.project-modal-dialog');
+    const content = projectModal.querySelector('.project-modal-content');
+    let lastTrigger = null;
+
+    function openProjectModal(card) {
+      const item = card.closest('.project-item');
+      const template = item && item.querySelector('template.project-modal-data');
+      if (!template || !content || !dialog) return;
+
+      content.replaceChildren(template.content.cloneNode(true));
+      const heading = content.querySelector('h3');
+      if (heading) heading.id = 'project-modal-title';
+
+      content.querySelectorAll('[data-count]').forEach(el => {
+        delete el.dataset.counted;
+        el.textContent = el.dataset.decimal === 'true' ? '0.0' : '0';
+        animateCounter(el);
+      });
+
+      lastTrigger = card;
+      projectModal.hidden = false;
+      projectModal.classList.add('is-open');
+      document.body.classList.add('modal-open');
+      dialog.focus({ preventScroll: true });
+    }
+
+    function closeProjectModal() {
+      projectModal.hidden = true;
+      projectModal.classList.remove('is-open');
+      document.body.classList.remove('modal-open');
+      if (content) content.replaceChildren();
+      if (lastTrigger) {
+        lastTrigger.focus({ preventScroll: true });
+        lastTrigger = null;
+      }
+    }
+
+    document.querySelector('.work-stage')?.addEventListener('click', (e) => {
+      const card = e.target.closest('.project-card');
+      if (card) openProjectModal(card);
+    });
+
+    projectModal.addEventListener('click', (e) => {
+      if (e.target.closest('[data-modal-close]')) closeProjectModal();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && projectModal.classList.contains('is-open')) {
+        closeProjectModal();
+      }
     });
   }
 
