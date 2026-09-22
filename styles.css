@@ -853,6 +853,11 @@ h2 {
   font-weight: 600;
 }
 
+.footer-links > a {
+  display: inline-flex;
+  align-items: center;
+}
+
 .footer-note {
   grid-column: 1/-1;
   padding-top: 38px;
@@ -2451,14 +2456,51 @@ body.modal-open {
   100% { transform: translateX(-33.33%); }
 }
 
-/* ── Button micro-animations ── */
+/* ── CSS arrows (no emoji glyphs on mobile) ── */
+.icon-arrow,
 .btn-arrow {
   display: inline-block;
+  width: 0.55em;
+  height: 0.55em;
+  margin-left: 0.35em;
+  border-top: 1.75px solid currentColor;
+  border-right: 1.75px solid currentColor;
+  transform: rotate(45deg);
+  vertical-align: 0.12em;
+  flex-shrink: 0;
   transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+.icon-arrow-down {
+  transform: rotate(135deg);
+  vertical-align: 0.2em;
+}
+
+.btn-arrow-se {
+  transform: rotate(135deg);
+  vertical-align: 0.05em;
+}
+
 .button:hover .btn-arrow {
-  transform: translate(3px, 3px);
+  transform: rotate(45deg) translate(2px, -2px);
+}
+
+.button:hover .btn-arrow-se {
+  transform: rotate(135deg) translate(2px, -2px);
+}
+
+.profile-card-link.icon-arrow {
+  width: 0.5em;
+  height: 0.5em;
+  margin-left: 0;
+}
+
+.footer-links a .icon-arrow {
+  margin-left: 0.4em;
+}
+
+.header-cta .icon-arrow {
+  margin-left: 0.45em;
 }
 
 .button-dark {
@@ -2582,6 +2624,8 @@ body.modal-open {
 
 /* ── Footer link hover ── */
 .footer-links a {
+  display: inline-flex;
+  align-items: center;
   transition: color 0.2s, transform 0.2s;
 }
 
@@ -2666,8 +2710,18 @@ body.modal-open {
     transform: none !important;
   }
 
-  .btn-arrow {
+  .btn-arrow,
+  .icon-arrow {
     transition: none;
+  }
+
+  .button:hover .btn-arrow,
+  .button:hover .btn-arrow-se {
+    transform: rotate(45deg);
+  }
+
+  .button:hover .btn-arrow-se {
+    transform: rotate(135deg);
   }
 
   .terminal-panel span {
